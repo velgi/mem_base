@@ -73,8 +73,9 @@ class SearchResultsView(generic.ListView):
             #   Bad but working way
             query_string = self.request.GET['q']
             search_tags = normalize_query(query_string)
-            for tag in search_tags:
-                object_list = Memes.objects.filter(**{'tags__name': tag})
+            object_list = Memes.objects.filter(**{'tags__name': search_tags[0]})
+            for tag in search_tags[1:]:
+                object_list = object_list.filter(**{'tags__name': tag})
 
             #   Good but not working way
             # object_list = Memes.objects.filter(self.get_query(query_string, 'tags__name'))
