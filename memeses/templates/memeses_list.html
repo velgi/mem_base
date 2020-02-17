@@ -1,0 +1,45 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if memeses_list %}
+      {% for memes in memeses_list %}
+      <div class="block-memes">
+        <a href="{{ memes.get_absolute_url }}" class="memes-title">{{ memes.name }}</a>
+        <a href="{{ memes.get_absolute_url }}"><img src="{{ memes.meme_image.url }}" class="image-properties"></a>
+         <div class="tag-line">{% for tag in memes.tags.all %}
+          <a href="{% url 'search_results' %}?q={{ tag }}" class="tag-inline">#{{ tag }}</a>
+        {% endfor %}</div>
+      <hr>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p>There are no memeses in the base.</p>
+    {% endif %}       
+
+    {% block pagination %}
+      {% if is_paginated %}
+
+      <div class="pagination">
+        <a href="?page=1">&laquo;</a>
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">&lsaquo;</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <b class="active">{{ num }}</b>
+          {% else %}
+            <a href="?page={{ num }}"> {{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">&rsaquo;</a>
+        {% endif %}
+        <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+      </div>
+
+      {% endif %}
+    {% endblock %}
+
+{% endblock %}

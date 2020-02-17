@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  {% block title %}<title>Mem Base | Memeses </title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1024">
+  
+  <!-- Добавление дополнительного статического CSS файла -->
+  {% load static %}
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans:100,300,400,500,700|Ubuntu:300,400,500,700&display=swap&subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+  <div>
+    <div id="mainmenu">
+    {% block mainmenu %}
+    <ul>
+        <li><a class="{% if request.resolver_match.url_name == "index" %}active-menu{% endif %}" href="{% url 'index' %}">Мемасики</a></li>
+        <li>⋮</li>
+        <li><a class="{% if request.resolver_match.url_name == "tags_list" %}active-menu{% endif %}" href="{% url 'tags_list' %}">Облако тегов</a></li>
+        <li>⋮</li>
+        <li><a class="{% if request.resolver_match.url_name == "search_results" %}active-menu{% endif %}" href="{% url 'search_results' %}">Поиск</a></li>
+        <li>⋮</li>
+        <li><a class="{% if request.resolver_match.url_name == "random_memes" %}active-menu{% endif %}" href="{% url 'random_memes'  %}">Случайный мем</a></li>
+    </ul>
+    {% endblock %}
+    </div>
+    <div class="block-all-memes">
+    {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Облако тэгов</h1>
+    {% if tags_list %}
+      <div class=block-memes>
+      {% for tag in tags_list %}
+        <a href="{% url 'search_results' %}?q={{ tag }}" class="tag-inline">#{{ tag }}</a>
+      {% endfor %}
+      </div>
+    {% else %}
+      <p>В базе нет ни одного тэга</p>
+    {% endif %}       
+{% endblock %}

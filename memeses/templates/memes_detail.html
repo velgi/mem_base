@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <!--<ul>-->
+      <div class="block-memes">
+        <div class="memes-title">{{ object.name }}</div>
+        <img src="{{ object.meme_image.url }}" class="image-properties"> 
+        <div class="tag-line">{% for tag in object.tags.all %}
+          <a href="{% url 'search_results' %}?q={{ tag }}" class="tag-inline">#{{ tag }}</a>
+          {% endfor %}</div>  
+      </div>
+    <!--</ul>-->
+{% endblock %}
