@@ -3,16 +3,24 @@
 {% block content %}
   
     {% if request.GET.q  %}
-      
-      <div class="wrap">
-        <form action="{% url 'search_results' %}" method="get" class="search">
-        <input name="q" type="text" class="searchTerm" value="{{ request.GET.q }}">
-        <button type="submit" class="searchButton">
-          <i class="fa fa-search"></i>
-        </button>
-      </form>
-     </div>
-
+      <div>
+        <form action="{% url 'search_results' %}" method="get">
+          <div class="search">
+            <input name="q" type="text" class="searchTerm" value="{{ request.GET.q }}">
+            <button type="submit" class="searchButton">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <div style="search-type">
+            <label for="by_tag">Sort by tag</label>
+            <input type="radio" name="search_type" id="by_tag" value='tag'>
+            <label for="by_title">Sort by title</label>
+            <input type="radio" name="search_type" id="by_title" value='title'>
+          </div>
+       </form>
+      </div>    
+      <hr>
+  
       
       {% for memes in search_results %}
       <div class="block-memes">
@@ -49,14 +57,23 @@
     {% endblock %}
 
     {% else %}
-      <div class="wrap">
-        <form action="{% url 'search_results' %}" method="get" class="search">
-          <input name="q" type="text" class="searchTerm" placeholder="Введите тэг (или список тэгов через запятую) для поиска">
-          <button type="submit" class="searchButton">
-            <i class="fa fa-search"></i>
-          </button>
-        </form>
-       </div>
+      <div>
+        <form action="{% url 'search_results' %}" method="get">
+          <div class="search">
+            <input name="q" type="text" class="searchTerm" placeholder="Введите тэг (или список тэгов через запятую) для поиска">
+            <button type="submit" class="searchButton">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <div style="search-type">
+            <label for="by_tag">Sort by tag</label>
+            <input type="radio" name="search_type" id="by_tag" value='tag'>
+            <label for="by_title">Sort by title</label>
+            <input type="radio" name="search_type" id="by_title" value='title'>
+          </div>
+       </form>
+      </div>
+      <hr> 
 
       <h1 align="middle">Вы пока ничего не искали. Воспользуйтесь формой поиска.</h1>
     {% endif %}       

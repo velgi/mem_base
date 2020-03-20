@@ -165,7 +165,7 @@ body{
 
 .search {
   width: 100%;
-  position: inline;
+  /*position: inline;*/
   display: flex;
 }
 
@@ -201,7 +201,7 @@ body{
 }
 
 .search-type{
-  display: inline;
+  display: block;
   font-family: 'Fira Sans', sans-serif;
   font-size: 17px;
   text-decoration: none;{
