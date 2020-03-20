@@ -1,34 +1,31 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+  
+    {% if request.GET.q  %}
+      
+      <div class="wrap">
+        <form action="{% url 'search_results' %}" method="get" class="search">
+        <input name="q" type="text" class="searchTerm" value="{{ request.GET.q }}">
+        <button type="submit" class="searchButton">
+          <i class="fa fa-search"></i>
+        </button>
+      </form>
+     </div>
 
-   <div class="wrap">
-    <form action="{% url 'search_results' %}" method="get" class="search">
-      <input name="q" type="text" class="searchTerm" placeholder="Введите тэг для поиска">
-      <button type="submit" class="searchButton">
-        <i class="fa fa-search"></i>
-      </button>
-    </form>
-   </div>
-
-    {% if search_results %}
+      
       {% for memes in search_results %}
       <div class="block-memes">
         <a href="{{ memes.get_absolute_url }}" class="memes-title">{{ memes.name }}</a>
         <a href="{{ memes.get_absolute_url }}"><img src="{{ memes.meme_image.url }}" class="image-properties"></a>
          <div class="tag-line">{% for tag in memes.tags.all %}
-          <a href="{% url 'search_results' %}?q={{ tag }}" class="tag-inline">#{{ tag }}</a>
+          <a href="{% url 'search_results' %}?q={{ request.GET.q }},{{ tag }}" class="tag-inline">#{{ tag }}</a>
         {% endfor %}</div>
       <hr>
       </div>
       {% endfor %}
-    {% else %}
-      <h1>Вы пока ничего не искали или такого тэга не существует. Воспользуйтесь формой поиска.</h1>
-    {% endif %}       
-    
-     
-    {% block pagination %}
-      {% if posts.has_other_pages %} 
+      {% block pagination %}
+      {% if posts.has_other_pages %}
       <div class="pagination">
         <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo;</a>
         {% if posts.has_previous %}
@@ -48,9 +45,20 @@
         {% endif %}
         <a href="?page={{ posts.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&raquo;</a>
       </div>
-       {% endif %} 
-    {% endblock %} 
+       {% endif %}
+    {% endblock %}
+
+    {% else %}
+      <div class="wrap">
+        <form action="{% url 'search_results' %}" method="get" class="search">
+          <input name="q" type="text" class="searchTerm" placeholder="Введите тэг (или список тэгов через запятую) для поиска">
+          <button type="submit" class="searchButton">
+            <i class="fa fa-search"></i>
+          </button>
+        </form>
+       </div>
+
+      <h1 align="middle">Вы пока ничего не искали. Воспользуйтесь формой поиска.</h1>
+    {% endif %}       
     
-
-
 {% endblock %}

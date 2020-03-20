@@ -43,20 +43,10 @@ class SearchResultsView(generic.ListView):
     template_name = 'search_results.html'
     context_object_name = 'search_results'
     paginate_by = 2
+    
 
-    #    def get_queryset(self):
-    #        query = self.request.GET.get('q')
-    #        object_list = Memes.objects.filter(
-    #            Q(tags__name__iexact=query)
-    #        )
-    #        return object_list
-
-    #    def normalize_query(query_string,
-    #        findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
-    #        normspace=re.compile(r'\s{2,}').sub):
-    #
-    #
-    #        return [normspace('',(t[0] or t[1]).strip()) for t in findterms(query_string)]
+    #search_type = self.request.GET.get('search_type')
+    
 
     def get_query(self, query_string, search_field):
         query = Q()
@@ -86,7 +76,6 @@ class SearchResultsView(generic.ListView):
         return object_list
 
     def get_context_data(self, **kwargs):
-        # context = super(SearchResultsView, self).get_context_data(**kwargs)
         list_search = self.get_queryset()
         paginator = Paginator(list_search, self.paginate_by)
 
@@ -112,6 +101,8 @@ class RandomMemesView(generic.DetailView):
     template_name = 'memes_detail.html'
 
     def get_object(self):
-        max_id = Memes.objects.all().aggregate(max_id=Max("id"))['max_id']
-        pk = random.randint(1, max_id)
+        #max_id = Memes.objects.all().aggregate(max_id=Max("id"))['max_id']
+        #pk = random.randint(1, max_id)
+        id_set = Memes.objects.values_list('id', flat=True)
+        pk = random.choice(id_set)
         return Memes.objects.get(pk=pk)
