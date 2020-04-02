@@ -17,7 +17,7 @@ class MemesesListView(generic.ListView):
     template_name = 'memeses_list.html'
     context_object_name = 'memeses_list'
     ordering = ['-id']
-    paginate_by = 1
+    paginate_by = 20
 
 
 class MemesDetailView(generic.DetailView):
@@ -31,6 +31,11 @@ class TagsCloudView(generic.ListView):
     template_name = 'tags_list.html'
 
 
+
+
+
+
+
 def normalize_query(query_string):
     string = query_string.replace(" ", '')
     string = string.replace('"', '')
@@ -42,24 +47,27 @@ class SearchResultsView(generic.ListView):
     model = Memes
     template_name = 'search_results.html'
     context_object_name = 'search_results'
-    paginate_by = 2
+    paginate_by = 20
     
 
-    #search_type = self.request.GET.get('search_type')
-    
+#    search_type = self.request.GET.get('search_type')
 
-    def get_query(self, query_string, search_field):
-        query = Q()
-        terms = normalize_query(query_string)
-        for term in terms:
-            q = Q(**{search_field: term})
-            query = query | q
-        return query
+#    if search_type == 'tag' and self.request.GET['q']:
+#    def get_query(self, query_string, search_field):
+#        query = Q()
+#        terms = normalize_query(query_string)
+#        for term in terms:
+#            q = Q(**{search_field: term})
+#            query = query | q
+#        return query
 
     def get_queryset(self):
         query_string = ''
         object_list = None
-        if 'q' in self.request.GET:
+
+        search_type = self.request.GET.get('search_type')
+         
+        if search_type == 'tag' and 'q' in self.request.GET:
             #   Bad but working way
             query_string = self.request.GET['q']
             search_tags = normalize_query(query_string)
@@ -67,13 +75,16 @@ class SearchResultsView(generic.ListView):
             for tag in search_tags[1:]:
                 object_list = object_list.filter(**{'tags__name': tag})
 
-            #   Good but not working way
-            # object_list = Memes.objects.filter(self.get_query(query_string, 'tags__name'))
+        elif search_type == 'title' and 'q' in self.request.GET:
+            query_string = self.request.GET.get('q')
+            object_list = Memes.objects.filter(Q(name__icontains=query_string))
 
         else:
             object_list = Memes.objects.all()
 
         return object_list
+
+
 
     def get_context_data(self, **kwargs):
         list_search = self.get_queryset()
@@ -101,8 +112,6 @@ class RandomMemesView(generic.DetailView):
     template_name = 'memes_detail.html'
 
     def get_object(self):
-        #max_id = Memes.objects.all().aggregate(max_id=Max("id"))['max_id']
-        #pk = random.randint(1, max_id)
         id_set = Memes.objects.values_list('id', flat=True)
         pk = random.choice(id_set)
         return Memes.objects.get(pk=pk)

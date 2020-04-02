@@ -23,3 +23,4 @@ class MemesAdmin(admin.ModelAdmin):
 @admin.register(Tags)
 class TagsAdmin(admin.ModelAdmin):
     list_display = ('name',)
+    ordering = ['name']

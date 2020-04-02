@@ -5,7 +5,7 @@
     {% if tags_list %}
       <div class=block-memes>
       {% for tag in tags_list %}
-        <a href="{% url 'search_results' %}?q={{ tag }}" class="tag-inline">#{{ tag }}</a>
+        <a href="{% url 'search_results' %}?q={{ tag }}&search_type=tag" class="tag-inline">#{{ tag }}</a>
       {% endfor %}
       </div>
     {% else %}

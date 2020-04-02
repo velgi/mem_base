@@ -6,7 +6,7 @@
         <div class="memes-title">{{ object.name }}</div>
         <img src="{{ object.meme_image.url }}" class="image-properties"> 
         <div class="tag-line">{% for tag in object.tags.all %}
-          <a href="{% url 'search_results' %}?q={{ tag }}" class="tag-inline">#{{ tag }}</a>
+          <a href="{% url 'search_results' %}?q={{ tag }}&search_type=tag" class="tag-inline">#{{ tag }}</a>
           {% endfor %}</div>  
       </div>
     <!--</ul>-->

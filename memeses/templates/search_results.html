@@ -2,7 +2,28 @@
 
 {% block content %}
   
-    {% if request.GET.q  %}
+    {% if request.GET.q %}
+      {% if request.GET.search_type == "tag" %}
+      <div>
+        <form action="{% url 'search_results' %}" method="get">
+          <div class="search">
+            <input name="q" type="text" class="searchTerm" value="{{ request.GET.q }}">
+            <button type="submit" class="searchButton">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <div style="search-type">
+            <label for="by_tag">Sort by tag</label>
+            <input type="radio" name="search_type" id="by_tag" value='tag' checked>
+            <label for="by_title">Sort by title</label>
+            <input type="radio" name="search_type" id="by_title" value='title'>
+          </div>
+       </form>
+      </div>    
+      <hr>
+
+      {% elif request.GET.search_type == "title" %}
+
       <div>
         <form action="{% url 'search_results' %}" method="get">
           <div class="search">
@@ -15,45 +36,97 @@
             <label for="by_tag">Sort by tag</label>
             <input type="radio" name="search_type" id="by_tag" value='tag'>
             <label for="by_title">Sort by title</label>
-            <input type="radio" name="search_type" id="by_title" value='title'>
+            <input type="radio" name="search_type" id="by_title" value='title' checked>
           </div>
        </form>
-      </div>    
+      </div>
       <hr>
+       
+      {% endif %}
   
       
       {% for memes in search_results %}
-      <div class="block-memes">
-        <a href="{{ memes.get_absolute_url }}" class="memes-title">{{ memes.name }}</a>
-        <a href="{{ memes.get_absolute_url }}"><img src="{{ memes.meme_image.url }}" class="image-properties"></a>
-         <div class="tag-line">{% for tag in memes.tags.all %}
-          <a href="{% url 'search_results' %}?q={{ request.GET.q }},{{ tag }}" class="tag-inline">#{{ tag }}</a>
-        {% endfor %}</div>
-      <hr>
-      </div>
+        {% if request.GET.search_type == "tag" %}
+
+        <div class="block-memes">
+          <a href="{{ memes.get_absolute_url }}" class="memes-title">{{ memes.name }}</a>
+          <a href="{{ memes.get_absolute_url }}"><img src="{{ memes.meme_image.url }}" class="image-properties"></a>
+           <div class="tag-line">{% for tag in memes.tags.all %}
+            <a href="{% url 'search_results' %}?q={{ request.GET.q }},{{ tag }}&search_type=tag" class="tag-inline">#{{ tag }}</a>
+          {% endfor %}</div>
+        <hr>
+        </div>
+        
+        {% elif request.GET.search_type == "title" %}
+
+        <div class="block-memes">
+          <a href="{{ memes.get_absolute_url }}" class="memes-title">{{ memes.name }}</a>
+          <a href="{{ memes.get_absolute_url }}"><img src="{{ memes.meme_image.url }}" class="image-properties"></a>
+           <div class="tag-line">{% for tag in memes.tags.all %}
+            <a href="{% url 'search_results' %}?q={{ tag }}&search_type=tag" class="tag-inline">#{{ tag }}</a>
+          {% endfor %}</div>
+        <hr>
+        </div>
+
+        {% endif %}
+
       {% endfor %}
+
+
+
+
+
       {% block pagination %}
-      {% if posts.has_other_pages %}
-      <div class="pagination">
-        <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo;</a>
-        {% if posts.has_previous %}
-          <a href="?page={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&lsaquo;</a>
-        {% endif %}
+        {% if request.GET.search_type == "tag" %}
+          {% if posts.has_other_pages %}
+          <div class="pagination">
+            <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}&search_type=tag{% endif %}">&laquo;</a>
+            {% if posts.has_previous %}
+              <a href="?page={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=tag{% endif %}">&lsaquo;</a>
+            {% endif %}
 
-        {% for num in posts.paginator.page_range %}
-          {% if num == posts.number %}
-            <b class="active">{{ num }}</b>
-          {% else %}
-            <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"> {{ num }}</a>
-          {% endif %}
-        {% endfor %}
+            {% for num in posts.paginator.page_range %}
+              {% if num == posts.number %}
+                <b class="active">{{ num }}</b>
+              {% else %}
+                <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=tag{% endif %}"> {{ num }}</a>
+              {% endif %}
+            {% endfor %}
 
-        {% if posts.has_next %}
-          <a href="?page={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&rsaquo;</a>
-        {% endif %}
-        <a href="?page={{ posts.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&raquo;</a>
-      </div>
-       {% endif %}
+            {% if posts.has_next %}
+              <a href="?page={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=tag{% endif %}">&rsaquo;</a>
+            {% endif %}
+            <a href="?page={{ posts.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=tag{% endif %}">&raquo;</a>
+            </div>
+           {% endif %}
+
+        {% elif request.GET.search_type == "title" %}
+          {% if posts.has_other_pages %}
+          <div class="pagination">
+            <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}&search_type=title{% endif %}">&laquo;</a>
+            {% if posts.has_previous %}
+              <a href="?page={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=title{% endif %}">&lsaquo;</a>
+            {% endif %}
+
+            {% for num in posts.paginator.page_range %}
+              {% if num == posts.number %}
+                <b class="active">{{ num }}</b>
+              {% else %}
+                <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=title{% endif %}"> {{ num }}</a>
+              {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+              <a href="?page={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=title{% endif %}">&rsaquo;</a>
+            {% endif %}
+            <a href="?page={{ posts.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}&search_type=title{% endif %}">&raquo;</a>
+            </div>
+           {% endif %}
+
+
+
+      {% endif %}
+
     {% endblock %}
 
     {% else %}
@@ -67,7 +140,7 @@
           </div>
           <div style="search-type">
             <label for="by_tag">Sort by tag</label>
-            <input type="radio" name="search_type" id="by_tag" value='tag'>
+            <input type="radio" name="search_type" id="by_tag" value='tag' checked>
             <label for="by_title">Sort by title</label>
             <input type="radio" name="search_type" id="by_title" value='title'>
           </div>
