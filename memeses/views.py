@@ -50,16 +50,6 @@ class SearchResultsView(generic.ListView):
     paginate_by = 20
     
 
-#    search_type = self.request.GET.get('search_type')
-
-#    if search_type == 'tag' and self.request.GET['q']:
-#    def get_query(self, query_string, search_field):
-#        query = Q()
-#        terms = normalize_query(query_string)
-#        for term in terms:
-#            q = Q(**{search_field: term})
-#            query = query | q
-#        return query
 
     def get_queryset(self):
         query_string = ''
@@ -109,7 +99,7 @@ class SearchResultsView(generic.ListView):
 
 class RandomMemesView(generic.DetailView):
     model = Memes
-    template_name = 'memes_detail.html'
+    template_name = 'random_memes_detail.html'
 
     def get_object(self):
         id_set = Memes.objects.values_list('id', flat=True)

@@ -4,9 +4,11 @@
     <h1>Облако тэгов</h1>
     {% if tags_list %}
       <div class=block-memes>
+        <div class=tag-line>
       {% for tag in tags_list %}
         <a href="{% url 'search_results' %}?q={{ tag }}&search_type=tag" class="tag-inline">#{{ tag }}</a>
       {% endfor %}
+        </div>
       </div>
     {% else %}
       <p>В базе нет ни одного тэга</p>
