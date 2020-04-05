@@ -1,5 +1,6 @@
 db.sqlite3
 media/images/
 memeses/__pycache__
+memeses/migrations/__pycache__
 mem_base/__pycache__
 mem_base/.env
