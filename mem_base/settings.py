@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'memeses.apps.MemesesConfig',
-    'pure_pagination',
 ]
 
 MIDDLEWARE = [
@@ -133,8 +132,3 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-
-PAGINATION_SETTINGS = {
-    'PAGE_RANGE_DISPLAYED': 5,
-    'MARGIN_PAGES_DISPLAYED': 2,
-}
