@@ -10,6 +10,7 @@ from django.utils.safestring import mark_safe
 @admin.register(Memes)
 class MemesAdmin(admin.ModelAdmin):
     list_display = ('image_miniature','name', 'display_tags', 'slug',)
+    list_per_page = 20
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ["image_miniature"]
     
